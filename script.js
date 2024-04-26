@@ -1,4 +1,9 @@
 $(function () {
+
+  // yang ni dia buaat secara default, border tu ada kt image
+  var selectedDiv = $("#imageFace");
+  selectedDiv.addClass("dotted-border")
+
   $("#glasses_menu").show();
   $("#beards_menu").hide();
   $("#hats_menu").hide();
@@ -59,15 +64,47 @@ $(function () {
         clonedAccessory.addClass("accessories")
         clonedAccessory.attr('id',`clone_${accessoryId[0]}`)
         $(this).append(clonedAccessory)
+        
+        // adakan border
+        selectedDiv.removeClass("dotted-border") 
+        selectedDiv = clonedAccessory
+        selectedDiv.addClass("dotted-border")
+
         ui.draggable.draggable("option", "revert", true); // revert back the drag img to the the place
       }else{
-        alert("this is the clone img")
+        selectedDiv.removeClass("dotted-border");
+        selectedDiv = $(`#${ui.draggable.attr("id")}`);
+        selectedDiv.addClass("dotted-border");
       }
-      
-
 
     },
   });
+  $("#plus").click(function(){
+    increasedSelected()
+  })
+
+  $("#minus").click(function(){
+    decreasedSelected()
+  })
+
+  $("#imageFace").click(function(){
+    selectedDiv.removeClass("dotted-border")
+    selectedDiv = $("#imageFace")
+    selectedDiv.addClass("dotted-border")
+  })
+  function increasedSelected(){
+    var curWidth = selectedDiv.width()
+    var curheight = selectedDiv.height()
+    selectedDiv.height(curheight * 1.1)
+    selectedDiv.width(curWidth * 1.1)
+  }
+
+  function decreasedSelected(){
+    var curWidth = selectedDiv.width()
+    var curheight = selectedDiv.height()
+    selectedDiv.height(curheight * .9)
+    selectedDiv.width(curWidth * .9)
+  }
 });
 
-// okey sambung nanti. 
+
