@@ -99,12 +99,71 @@ $(function () {
     selectedDiv.width(curWidth * 1.1)
   }
 
+  // use keyboard + to increased size
+  $(document).keydown(function(e){
+    if(e.which == 187 || e.keycode == 187){
+      increasedSelected()
+    }else if(e.which == 189 || e.keycode == 189){
+      decreasedSelected()
+    }
+  })
+
+
+  // how to save image
+  $("#save").click(function(){ // when button save clicked
+    
+    var canvas = document.createElement("canvas") // create canvas element 
+    var ctx = canvas.getContext("2d")           // get context of canvas
+
+    canvas.width = $("#imageFace").width()
+    canvas.height = $("#imageFace").height()
+
+                                                                  // amik url gambar dari css. mun kitak perasan, nya set gambar pake property dalam css.
+    var backgroundImage = $("#imageFace").css('background-image') // so mun mok amik gambar ya, pake .css("background-image")
+
+    var imgURL = backgroundImage.split('"') // then klk kitak dapat dalam bentuk url("fileName.png"), 
+                                            // so we split it with `""`, and take the second part which is our file name
+
+    var bgImage = new Image() // new object Image()
+
+
+    bgImage.onload = function(){ // when page load
+
+      ctx.drawImage(bgImage,0,0,canvas.width,canvas.height) // draw
+
+      var images = $("#imageFace").find('img')
+      
+      images.each(function(){
+        var image = this;
+        var imagePosition = $(image).position()
+        var imageWidth = $(image).width()
+        var imageHeight = $(image).height()
+
+        ctx.drawImage(image, imagePosition.left, imageWidth.top, imageWidth, imageHeight)
+      })
+
+      
+      var dataURL = canvas.toDataURL('image/png')
+      var link = document.createElement('a')
+
+      link.download = 'image.png'
+      link.href = dataURL
+
+      link.click();
+
+      document.body.appendChild(canvas)
+    } 
+    bgImage.src = imgURL[1]
+
+  })
+
   function decreasedSelected(){
     var curWidth = selectedDiv.width()
     var curheight = selectedDiv.height()
     selectedDiv.height(curheight * .9)
     selectedDiv.width(curWidth * .9)
   }
+  
 });
 
 
